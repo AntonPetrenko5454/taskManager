@@ -4,4 +4,3 @@ class EnterState(StatesGroup):
     nickname= State()
     password= State()
     status= State()
-    conditionAcc=State()
