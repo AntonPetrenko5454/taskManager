@@ -42,11 +42,30 @@ passwordChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
 fIOChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
 telephonNumberChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
 emailChangeKeyboard=types.ReplyKeyboardMarkup(row_width=1)
-passwordChangeKeyboard.add(backButtonToTest)
-fIOChangeKeyboard.add(backButtonToTest)
-telephonNumberChangeKeyboard.add(backButtonToTest)
-emailChangeKeyboard.add(backButtonToTest)
+readyPasswordButton=types.InlineKeyboardButton(text='Готово',callback_data='readyPasswordButton_click')
+readyFIOButton=types.InlineKeyboardButton(text='Готово' , callback_data='readyFIOButton_click')
+readyPhoneButton=types.InlineKeyboardButton(text='Готово',callback_data='readyPhoneButton_click')
+readyEmailButton=types.InlineKeyboardButton(text='Готово',callback_data='readyEmailButton_click')
+passwordChangeKeyboard.add(readyPasswordButton,backButtonToTest)
+fIOChangeKeyboard.add(readyFIOButton,backButtonToTest)
+telephonNumberChangeKeyboard.add(readyPhoneButton,backButtonToTest)
+emailChangeKeyboard.add(readyEmailButton,backButtonToTest)
 
+@dp.callback_query_handler(text='readyPasswordButton_click')
+async def readyPasswordButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await state.update_data(password=call.message.text)
+
+@dp.callback_query_handler(text='readyFIOButton_click')
+async def readyFIOButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await state.update_data(fullName=call.message.text)
+
+@dp.callback_query_handler(text='readyPhoneButton_click')
+async def readyPhoneButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await state.update_data(phoneNumber=call.message.text)
+
+@dp.callback_query_handler(text='readyEmailButton_click')
+async def readyEmailButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await state.update_data(email=call.message.text)
 
 @dp.callback_query_handler(text='yes2Button_click')
 async def yes2ButtonClick(call: types.CallbackQuery,state: FSMContext):
@@ -54,7 +73,9 @@ async def yes2ButtonClick(call: types.CallbackQuery,state: FSMContext):
     await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
     data = await state.get_data()
     UserController.AddNewUser(call.message.from_user.id, data['nickname'], data['password'], data['fullName'],data['telephonNumber'], data['email'])
+    await state.finish()
     await call.answer()
+
 
 @dp.callback_query_handler(text='no2Button_click')
 async def no2ButtonClick(call: types.CallbackQuery):
@@ -62,22 +83,22 @@ async def no2ButtonClick(call: types.CallbackQuery):
     await call.answer()
 
 @dp.callback_query_handler(text='passwordChangeButton_click')
-async def passwordButtonClick(call: types.CallbackQuery,state: FSMContext):
-    await call.message.edit_text('Введите ваш новый пароль',reply_markup=passwordChangeKeyboard)
+async def passwordButtonClick(call: types.CallbackQuery):
+    await call.message.edit_text('Введите ваш новый пароль ',reply_markup=passwordChangeKeyboard)
     await call.answer()
 
 @dp.callback_query_handler(text='fIOChangeButton_click')
-async def fIOButtonClick(call: types.CallbackQuery,state: FSMContext):
+async def fIOButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Введите Ф.И.О',reply_markup=fIOChangeKeyboard)
     await call.answer()
 
 @dp.callback_query_handler(text='telephonNumberChangeButton_click')
-async def telephonButtonClick(call: types.CallbackQuery,state: FSMContext):
+async def telephonButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Введите ваш новый телефон',reply_markup=telephonNumberChangeKeyboard)
     await call.answer()
 
 @dp.callback_query_handler(text='emailChangeButton_click')
-async def emailButtonClick(call: types.CallbackQuery,state: FSMContext):
+async def emailButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Введите ваш новый email',reply_markup=emailChangeKeyboard)
     await call.answer()
 
@@ -92,6 +113,7 @@ async def readyButtonClick(call: types.CallbackQuery,state: FSMContext):
     await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
     data = await state.get_data()
     UserController.AddNewUser(call.message.from_user.id, data['nickname'], data['password'], data['fullName'],data['telephonNumber'], data['email'])
+    await state.finish()
     await call.answer()
 
 
@@ -372,10 +394,6 @@ async def getStatus(message: types.Message,state: FSMContext):
     await message.answer(f"login: {data['nickname']}\npassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['telephonNumber']}\nemail: {data['email']}")
     await message.answer('Правильно ли вы ввели информацию?',reply_markup=keyboardTest)
 
-
-
-
-    await state.finish()
 @dp.message_handler(regexp='вход')
 async def enterName(message: types.Message):
     await message.answer('Введите логин')
