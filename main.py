@@ -6,47 +6,117 @@ from enterState import EnterState
 from aiogram.types import ContentType
 from aiogram.utils import executor
 from config import TOKEN
+from userController import UserController
 from userInfo import UserInfo
 from registrationState import RegistrationState
+
+
+
+
+
+
+
+
 keyboardEnter=types.InlineKeyboardMarkup(row_width=1)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot,storage=MemoryStorage())
 ##users=[]
 currentUsers={}
-
-
-
-
-
 backButton=types.InlineKeyboardButton(text='Назад',callback_data='backButton_click')
+
+###Проверка информации при регистрации
+keyboardTest=types.InlineKeyboardMarkup(row_width=2)
+yes2Button=types.InlineKeyboardButton(text='Да',callback_data='yes2Button_click')
+no2Button=types.InlineKeyboardButton(text='Нет',callback_data='no2Button_click')
+keyboardTest.add(yes2Button,no2Button)
+keyboardTestNo=types.InlineKeyboardMarkup(row_width=1)
+readyChangeButton=types.InlineKeyboardButton(text='Готово',callback_data='readyChangeButton_click')
+passwordChangeButton=types.InlineKeyboardButton(text='Изменить пароль',callback_data='passwordChangeButton_click')
+fIOChangeButton=types.InlineKeyboardButton(text='Изменить Ф.И.О',callback_data='fIOchangeButton_click')
+telephonNumberChangeButton=types.InlineKeyboardButton(text='Изменить номер телефона',callback_data='telephonNumberChangeButton_click')
+emailChangeButton=types.InlineKeyboardButton(text='Изменить email',callback_data='emailChangeButton_click')
+keyboardTestNo.add(passwordChangeButton,fIOChangeButton,telephonNumberChangeButton,emailChangeButton,readyChangeButton)
+backButtonToTest=types.InlineKeyboardButton(text='Назад',callback_data='backButtonToTest_click')
+passwordChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
+fIOChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
+telephonNumberChangeKeyboard=types.InlineKeyboardMarkup(row_width=1)
+emailChangeKeyboard=types.ReplyKeyboardMarkup(row_width=1)
+passwordChangeKeyboard.add(backButtonToTest)
+fIOChangeKeyboard.add(backButtonToTest)
+telephonNumberChangeKeyboard.add(backButtonToTest)
+emailChangeKeyboard.add(backButtonToTest)
+
+
+@dp.callback_query_handler(text='yes2Button_click')
+async def yes2ButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.answer('Регистрация успешно завершена')
+    await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
+    data = await state.get_data()
+    UserController.AddNewUser(call.message.from_user.id, data['nickname'], data['password'], data['fullName'],data['telephonNumber'], data['email'])
+    await call.answer()
+
+@dp.callback_query_handler(text='no2Button_click')
+async def no2ButtonClick(call: types.CallbackQuery):
+    await call.message.edit_text('Что вы хотите изменить?',reply_markup=keyboardTestNo)
+    await call.answer()
+
+@dp.callback_query_handler(text='passwordChangeButton_click')
+async def passwordButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.edit_text('Введите ваш новый пароль',reply_markup=passwordChangeKeyboard)
+    await call.answer()
+
+@dp.callback_query_handler(text='fIOChangeButton_click')
+async def fIOButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.edit_text('Введите Ф.И.О',reply_markup=fIOChangeKeyboard)
+    await call.answer()
+
+@dp.callback_query_handler(text='telephonNumberChangeButton_click')
+async def telephonButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.edit_text('Введите ваш новый телефон',reply_markup=telephonNumberChangeKeyboard)
+    await call.answer()
+
+@dp.callback_query_handler(text='emailChangeButton_click')
+async def emailButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.edit_text('Введите ваш новый email',reply_markup=emailChangeKeyboard)
+    await call.answer()
+
+@dp.callback_query_handler(text='backButtonToTest_click')
+async def backButtonToTestClick(call: types.CallbackQuery):
+    await call.message.edit_text('Что вы хотите изменить?',reply_markup=keyboardTestNo)
+    await call.answer()
+
+@dp.callback_query_handler(text='readyChangeButton_click')
+async def readyButtonClick(call: types.CallbackQuery,state: FSMContext):
+    await call.message.answer('Регистрация успешно завершена')
+    await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
+    data = await state.get_data()
+    UserController.AddNewUser(call.message.from_user.id, data['nickname'], data['password'], data['fullName'],data['telephonNumber'], data['email'])
+    await call.answer()
+
+
 ###Выход
-keyboardYesNo=types.ReplyKeyboardMarkup()
-yesNoButtons=['Да','Нет']
-keyboardYesNo.add(yesNoButtons)
-keyboardExit=types.ReplyKeyboardMarkup()
-exitButton=['Выход']
-keyboardExit.add(exitButton)
-@dp.message_handler(commands='Выход')
-async def exitButton(message: types.Message,state: FSMContext):
-    await message.answer('Вы уверены , что хотите выйти ?',reply_markup=keyboardYesNo)
-
-@dp.message_handler(commands='Да')
-async def yesButton(message: types.Message,state: FSMContext):
-    fUser = open('user.txt','a')
-    for line in fUser:
-        info = line.split()
-        if info[0] == str(message.from_user.id):
-            info[3]=='offline'
-            fUser.close()
-    await message.answer('',reply_markup=primaryKeyboard)
-@dp.message_handler(commands='Нет')
-async def noButton(message: types.Message,state: FSMContext):
-    await message.answer('Добро пожаловать',reply_markup=keyboardEnter)
+keyboardYesNo=types.InlineKeyboardMarkup(row_width=2)
+yesButton=types.InlineKeyboardButton(text='Да',callback_data='yesButton_click')
+noButton=types.InlineKeyboardButton(text='Нет',callback_data='noButton_click')
+keyboardYesNo.add(yesButton,noButton)
+exitButton=types.InlineKeyboardButton(text='Выход',callback_data='exitButton_click')
 
 
 
+@dp.callback_query_handler(text='exitButton_click')
+async def exitButtonClick(call: types.CallbackQuery):
+    await call.message.edit_text('Вы уверены , что хотите выйти ?',reply_markup=keyboardYesNo)
+    await call.answer()
 
+@dp.callback_query_handler(text='yesButton_click')
+async def yesButtonClick(call: types.CallbackQuery):
+    await call.message.answer('Вы успешно вышли')
+
+@dp.callback_query_handler(text='noButton_click')
+async def noButtonClick(call: types.CallbackQuery):
+    await call.message.answer('Добро пожаловать',reply_markup=keyboardEnter)
+    await call.answer()
 
 
 ### род деятельности
@@ -244,43 +314,22 @@ async def backBotInfoButtonClick(call: types.CallbackQuery):
 
 
 
-keyboardEnter.add(getTaskButton,giveTaskButton,allUserInfoButton,searchUserButton,botInfoButton)
-
-
-
-
+keyboardEnter.add(getTaskButton,giveTaskButton,allUserInfoButton,searchUserButton,botInfoButton,exitButton)
 
 
 
 
 primaryKeyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
 primaryKeyboard.add('Регистрация','Вход')
-
 keyboardReg = types.ReplyKeyboardMarkup()
-usersCount=len(open('user.txt').readlines())
-
-'''fUser=open('user.txt')
-for line in fUser:
-    info=line.split()
-    user=User(info[0],info[1],info[2])
-    users.append(user)
-fUser.close()'''
 
 
 @dp.message_handler(regexp='Регистрация')
 async def registration(message: types.Message):
-    x=0
-    fUser = open('user.txt', 'r')
-    for line in fUser:
-        info = line.split()
-        if info[0] == str(message.from_user.id):
-            await message.answer('Регистрация невозможна , такой ID уже есть')
-            fUser.close()
-            break
-        else:
-            x=x+1
-    if x==usersCount:
+   if UserController.HasUser(message.from_user.id):
+       await message.answer('Вы уже зарегистрированы')
+       return
+   else:
         await message.answer('Введите nickname')
         await RegistrationState.nickname.set()
 
@@ -289,32 +338,43 @@ async def registration(message: types.Message):
 @dp.message_handler(state=RegistrationState.nickname)
 async def getNickname(message: types.Message,state: FSMContext):
     await state.update_data(nickname=message.text)
-    fUser = open('user.txt', 'r')
-    for line in fUser:
-        info = line.split()
-        if info[1] == message.text:
-            await message.answer('Такой nickname уже есть')
-            return
-    fUser.close()
-    await message.answer('Введите пароль')
+    if UserController.IsNicknameFree(message.text):
+        await message.answer('Такой nickname уже есть')
+    else:
+        await message.answer('Введите пароль')
+        await RegistrationState.next()
 
+@dp.message_handler(state=RegistrationState.password)
+async def getFullName(message: types.Message,state: FSMContext):
+    await state.update_data(password=message.text)
+    await message.answer('Введите ваше Ф.И.О')
+    await RegistrationState.next()
+
+@dp.message_handler(state=RegistrationState.fullName)
+async def getTelephonNumber(message: types.Message,state: FSMContext):
+    await state.update_data(fullName=message.text)
+    await message.answer('Введите ваш номер телефона, для того чтобы с вами было легче связаться')
+    await RegistrationState.next()
+
+@dp.message_handler(state=RegistrationState.telephonNumber)
+async def getEmail(message: types.Message, state: FSMContext):
+    await state.update_data(telephonNumber=message.text)
+    await message.answer('Введите вашу электронную почту')
     await RegistrationState.next()
 
 
-@dp.message_handler(state=RegistrationState.password)
-async def getPassword(message: types.Message,state: FSMContext):
-    await state.update_data(password=message.text)
-    await state.update_data(status='offline')
+@dp.message_handler(state=RegistrationState.email)
+async def getStatus(message: types.Message,state: FSMContext):
+    await state.update_data(email=message.text)
+    await state.update_data(status='active')
 
     data = await state.get_data()
-    await message.answer(f"login: {data['nickname']}")
-    await message.answer('Регистрация успешно завершена')
-    global usersCount
-    usersCount +=1
-    fUser=open('user.txt','a')
-    fUser.write(f"{message.from_user.id} {data['nickname']} {data['password']} {data['status']}\n")
-    await message.answer('Выберите род деятельности , которым вы хотите заниматься',reply_markup=criteriaKeyboard)
-    fUser.close()
+    await message.answer(f"login: {data['nickname']}\npassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['telephonNumber']}\nemail: {data['email']}")
+    await message.answer('Правильно ли вы ввели информацию?',reply_markup=keyboardTest)
+
+
+
+
     await state.finish()
 @dp.message_handler(regexp='вход')
 async def enterName(message: types.Message):
@@ -332,22 +392,17 @@ async def checkInfo(message: types.Message,state: FSMContext):
     await state.update_data(password=message.text)
     await state.update_data(status='online')
     data = await state.get_data()
-    x=0
-    fUser = open('user.txt','r')
-    for line in fUser:
-        info=line.split()
-        if info[1] == data['nickname'] and info[2] == data['password']:
-            fUser.close()
-            await message.answer('Добро пожаловать',reply_markup=keyboardEnter)
-            fUser = open('user.txt','w')
-            fUser.write(f"{message.from_user.id} {data['nickname']} {data['password']} {data['status']}\n")
-            fUser.close()
-            break
-        else:
-            x=x+1
-    if x==usersCount:
-        await message.answer('Логин или пароль введены неверно')
+
+
     await state.finish()
+
+@dp.message_handler(commands=['start','начать'])
+async def startCommands(message: types.Message):
+    await message.answer('Hello',reply_markup=primaryKeyboard)
+
+
+'''async def on_startup(_):
+    await bot.send_message(bot.get_me().id,text='sfsfsdf',reply_markup=primaryKeyboard)'''
 
 @dp.callback_query_handler(text='backButton_click')
 async def backButtonClick(call: types.CallbackQuery):
