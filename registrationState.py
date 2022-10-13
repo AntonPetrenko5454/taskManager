@@ -7,8 +7,7 @@ class RegistrationState(StatesGroup):
     fullName = State()
     telephonNumber = State()
     email = State()
-    status = State()
-    edit = True
+    edit = State()
 
 
 
