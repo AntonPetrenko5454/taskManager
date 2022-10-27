@@ -1,0 +1,15 @@
+from aiogram import types
+
+botInfoKeyboard = types.InlineKeyboardMarkup(row_width=1)
+botInfoKeyboard21 = types.InlineKeyboardMarkup(row_width=1)
+botInfoWishKeyboard = types.InlineKeyboardMarkup(row_width=1)
+botInfoReviewKeyboard = types.InlineKeyboardMarkup(row_width=1)
+botInfoReviewWriteKeyboard = types.InlineKeyboardMarkup(row_width=1)
+backBotInfoButton = types.InlineKeyboardButton(text='Назад', callback_data='backBotInfoButton_click')
+botInfoButton = types.InlineKeyboardButton(text='Информация о боте', callback_data='botInfoButton_click')
+writeWishBotButton = types.InlineKeyboardButton(text='Оставить пожелание', callback_data='writeWishBotButton_click')
+writeReviewBotButton = types.InlineKeyboardButton(text='Оставить отзыв', callback_data='writeReviewBotButton_click')
+seeReviewBotButton = types.InlineKeyboardButton(text='Посмотреть отзывы', callback_data='seeReviewBotButton_click')
+botInfoKeyboard.add(writeWishBotButton, seeReviewBotButton, backButton)
+botInfoReviewWriteKeyboard.add(writeReviewBotButton, backBotInfoButton)
+botInfoWishKeyboard.add(backBotInfoButton)

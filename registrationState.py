@@ -5,7 +5,7 @@ class RegistrationState(StatesGroup):
     nickname = State()
     password = State()
     fullName = State()
-    telephonNumber = State()
+    phoneNumber = State()
     email = State()
     edit = State()
 
