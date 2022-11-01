@@ -1,5 +1,7 @@
 from aiogram import types, Dispatcher
 
+from keyboards.about import userInfoKeyboard
+
 
 async def userInfoButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Тут вы можете посмотреть личную информацию', reply_markup=userInfoKeyboard)
@@ -7,12 +9,12 @@ async def userInfoButtonClick(call: types.CallbackQuery):
 
 
 async def historyTaskButtonClick(call: types.CallbackQuery):
-    await call.message.edit_text('Ваша история задач:', reply_markup=historyTaskKeyboard)
+    await call.message.edit_text('Ваша история задач:'          ''', reply_markup=historyTaskKeyboard''')
     await call.answer()
 
 
 async def userInfoButtonClick(call: types.CallbackQuery):
-    await call.message.edit_text('Ф.И.O: \n Возраст: \n Страна: \n Отзывы: \n', reply_markup=allUserInfoKeyboard)
+    await call.message.edit_text('Ф.И.O: \n Возраст: \n Страна: \n Отзывы: \n'    ''', reply_markup=allUserInfoKeyboard''')
     await call.answer()
 
 

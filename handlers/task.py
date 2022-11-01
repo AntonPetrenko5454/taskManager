@@ -38,7 +38,7 @@ def registerHandlersTask(dp: Dispatcher):
 
 
 
-
+'''
 @dp.callback_query_handler(text='giveTaskButton_click')
 async def giveTaskButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Тут вы можете дать задание конкретному пользователю или выставить задание на аукцион',
@@ -93,3 +93,4 @@ async def backGetButtonClick(call: types.CallbackQuery):
         'Тут вы можете получить задание от конкретного пользователя или встать в очередь за заданием',
         reply_markup=getTaskKeyboard)
     await call.answer()
+'''

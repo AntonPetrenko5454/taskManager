@@ -1,9 +1,30 @@
 from aiogram import types
 
-keyboardTest = types.InlineKeyboardMarkup(row_width=2)
-yes2Button = types.InlineKeyboardButton(text='Да', callback_data='yes2Button_click')
-no2Button = types.InlineKeyboardButton(text='Нет', callback_data='no2Button_click')
-keyboardTest.add(yes2Button, no2Button)
+yesNoKeyboard = types.InlineKeyboardMarkup(row_width=2)
+yesButton = types.InlineKeyboardButton(text='Да', callback_data='yesButton_click')
+noButton = types.InlineKeyboardButton(text='Нет', callback_data='noButton_click')
+yesNoKeyboard.add(yesButton, noButton)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 keyboardTestNo = types.InlineKeyboardMarkup(row_width=1)

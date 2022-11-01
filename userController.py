@@ -23,7 +23,8 @@ class UserController:
                 raise DuplicateNicknameException()
             else:
                 cursor.execute('INSERT INTO user (id, nickname, password, fullname, email, phone, status) '
-                               'VALUES (%s, %s, %s, %s, %s, %s, %s)', (id, nickname, password, fullname, email, phone, 'active'))
+                               'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                               (id, nickname, password, fullname, email, phone, 'active'))
                 connection.commit()
 
     @staticmethod
@@ -56,5 +57,7 @@ class UserController:
             else:
                 return True
 
-
-
+    @staticmethod
+    def Authorization(id, password):
+        # TODO: Реализация функции
+        pass

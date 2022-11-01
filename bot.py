@@ -5,6 +5,8 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from config import TOKEN
 from handlers.about import registerHandlersAbout
 from handlers.enter import registerHandlersEnter
+from handlers.primary import registerHandlersCommon
+from handlers.registration import registerHandlersRegistration
 from handlers.task import registerHandlersTask
 
 currentUsers = {}
@@ -17,6 +19,8 @@ async def main():
     registerHandlersEnter(dp)
     registerHandlersAbout(dp)
     registerHandlersTask(dp)
+    registerHandlersRegistration(dp)
+    registerHandlersCommon(dp)
 
     await dp.start_polling()
 

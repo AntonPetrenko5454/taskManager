@@ -1,4 +1,13 @@
-from aiogram import types
+from aiogram import types, Dispatcher
+
+
+'''
+
+def registerHandlersBotInfo(dp: Dispatcher):
+    dp.register_callback_query_handler(userInfoButtonClick, lambda call: call.data == 'userInfoButton_click', state='*')
+    dp.register_callback_query_handler(historyTaskButtonClick, lambda call: call.data == 'historyTaskButton_click', state='*')
+    dp.register_callback_query_handler(userInfoButtonClick, lambda call: call.data == 'userInfoButton_click', state='*')
+    dp.register_callback_query_handler(backUserInfoButtonClick, lambda call: call.data == 'backUserInfoButton_click', state='*')
 
 
 @dp.callback_query_handler(text='botInfoButton_click')
@@ -33,3 +42,5 @@ async def backBotInfoButtonClick(call: types.CallbackQuery):
     await call.message.edit_text('Тут вы можете прочитать информацию о боте или оставить пожелание/отзыв',
                                  reply_markup=botInfoKeyboard)
     await call.answer()
+
+'''

@@ -17,12 +17,13 @@ async def enterPassword(message: types.Message, state: FSMContext):
 async def checkInfo(message: types.Message, state: FSMContext):
     await state.update_data(password=message.text)
     data = await state.get_data()
+
     # TODO: Проверка корректности и перенаправление его на клавиатуру ________
     #       Если не корректный ввод, то перенаправление его на _______________
     await state.finish()
 
 
 def registerHandlersEnter(dp: Dispatcher):
-    dp.register_message_handler(enterName, commands=['Вход'], state="*")
+    dp.register_message_handler(enterName, regexp='Вход', state="*")
     dp.register_message_handler(enterPassword, state=EnterState.nickname)
     dp.register_message_handler(checkInfo, state=EnterState.password)
