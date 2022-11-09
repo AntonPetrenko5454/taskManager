@@ -59,6 +59,18 @@ class UserController:
                 return True
 
     @staticmethod
-    def Authorization(id, password):
-        # TODO: Реализация функции
-        pass
+    def Authorization(id, nickname, password):
+        connection = pymysql.connect(host=UserController.host,
+                                     user=UserController.user,
+                                     passwd=UserController.passwd,
+                                     db=UserController.db)
+        with connection:
+
+            cursor = connection.cursor()
+            cursor.execute('SELECT * FROM user WHERE id=%s and nickname=%s and password=%s', (id, nickname, password))
+            row = cursor.fetchone()
+            if row is None:
+                return False
+            else:
+                return True
+

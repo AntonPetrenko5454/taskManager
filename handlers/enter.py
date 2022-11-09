@@ -1,11 +1,16 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
+
+from userController import UserController
 from enterState import EnterState
+from keyboards.main import mainKeyboard
+from keyboards.primary import primaryKeyboard
 
 
 async def enterName(message: types.Message):
     await message.answer('Введите логин')
     await EnterState.nickname.set()
+    print(message.from_user.id)
 
 
 async def enterPassword(message: types.Message, state: FSMContext):
@@ -18,6 +23,10 @@ async def checkInfo(message: types.Message, state: FSMContext):
     await state.update_data(password=message.text)
     data = await state.get_data()
 
+    if UserController.Authorization(message.from_user.id, data['nickname'], data['password']) == False:
+        await message.answer('Логин или пароль введены не верно', reply_markup=primaryKeyboard)
+    else:
+        await message.answer('Добро пожаловать',reply_markup=mainKeyboard)
     # TODO: Проверка корректности и перенаправление его на клавиатуру ________
     #       Если не корректный ввод, то перенаправление его на _______________
     await state.finish()
