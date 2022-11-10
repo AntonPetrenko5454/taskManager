@@ -27,8 +27,7 @@ async def checkInfo(message: types.Message, state: FSMContext):
         await message.answer('Логин или пароль введены не верно', reply_markup=primaryKeyboard)
     else:
         await message.answer('Добро пожаловать',reply_markup=mainKeyboard)
-    # TODO: Проверка корректности и перенаправление его на клавиатуру ________
-    #       Если не корректный ввод, то перенаправление его на _______________
+
     await state.finish()
 
 
