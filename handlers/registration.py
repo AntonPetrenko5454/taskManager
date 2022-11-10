@@ -55,39 +55,31 @@ async def getEdit(message: types.Message, state: FSMContext):
     await RegistrationState.next()
 
 
-async def finish(message: types.Message, state: FSMContext):
-    if message.text == 'Нет':
-        # await message.answer('Что вы хотите изменить?', reply_markup=keyboardTestNo)
-        # await state.update_data(edit=True)
-        await state.finish()
-        await RegistrationState.nickname.set()
-
-    if message.text == 'Да':
-        data = await state.get_data()
-        UserController.AddNewUser(message.from_user.id, data['nickname'], data['password'], data['fullName'],
-                                  data['phoneNumber'], data['email'])
-        await state.finish()
-
 async def yesButtonClick(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer('Регистрация успешно завершена')
-    await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
+    data = await state.get_data()
+    UserController.AddNewUser(call.message.from_user.id, data['nickname'], data['password'], data['fullName'],
+                              data['phoneNumber'], data['email'])
+    await state.finish()
+    # await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
     await call.answer()
 
 
 async def noButtonClick(call: types.CallbackQuery, state: FSMContext):
     # await call.message.edit_text('Что вы хотите изменить?', reply_markup=keyboardTestNo)
     # TODO: Проверить будет ли переход на начальное состояние
-    await call.answer()
+    await state.finish()
+    await call.message.answer('Введите nickname')
     await RegistrationState.nickname.set()
 
+
 def registerHandlersRegistration(dp: Dispatcher):
-    dp.register_message_handler(getNickname, commands=['Регистрация'], state="*")
+    dp.register_message_handler(getNickname, regexp='Регистрация', state="*")
     dp.register_message_handler(getPassword, state=RegistrationState.nickname)
     dp.register_message_handler(getFullName, state=RegistrationState.password)
     dp.register_message_handler(getPhoneNumber, state=RegistrationState.fullName)
     dp.register_message_handler(getEmail, state=RegistrationState.phoneNumber)
     dp.register_message_handler(getEdit, state=RegistrationState.email)
-    dp.register_message_handler(finish, state=RegistrationState.edit)
 
     dp.register_callback_query_handler(yesButtonClick, lambda call: call.data == 'yesButton_click', state='*')
     dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')

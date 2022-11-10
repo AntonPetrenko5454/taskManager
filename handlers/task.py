@@ -26,8 +26,9 @@ async def backToEnterButtonClick(call: types.CallbackQuery):
 
 def registerHandlersTask(dp: Dispatcher):
     dp.register_callback_query_handler(exitButtonClick, lambda call: call.data == 'exitButton_click', state='*')
-    dp.register_callback_query_handler(yesButtonClick, lambda call: call.data == 'yesButton_click', state='*')
-    dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')
+    # TODO: Пересечение callback
+    # dp.register_callback_query_handler(yesButtonClick, lambda call: call.data == 'yesButton_click', state='*')
+    # dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')
     dp.register_callback_query_handler(backToEnterButtonClick, lambda call: call.data == 'backToEnterButton_click', state='*')
 
 

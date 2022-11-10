@@ -1,13 +1,14 @@
 import pymysql
 
+import settings
 from exceptions import DuplicateNicknameException
 
 
 class UserController:
-    host = 'localhost'
-    user = 'root'
-    passwd = '5454Anton5454'
-    db = 'taskmanager_db'
+    host = settings.host
+    user = settings.user
+    passwd = settings.passwd
+    db = settings.db
 
     @staticmethod
     def AddNewUser(id, nickname, password, fullname=None, email=None, phone=None):
