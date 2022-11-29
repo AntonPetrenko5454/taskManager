@@ -23,7 +23,7 @@ async def checkInfo(message: types.Message, state: FSMContext):
     await state.update_data(password=message.text)
     data = await state.get_data()
 
-    if UserController.Authorization(message.from_user.id, data['nickname'], data['password']) == False:
+    if not UserController.Authorization(message.from_user.id, data['nickname'], data['password']):
         await message.answer('Логин или пароль введены не верно', reply_markup=primaryKeyboard)
     else:
         await message.answer('Добро пожаловать',reply_markup=mainKeyboard)

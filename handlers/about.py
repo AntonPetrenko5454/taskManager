@@ -1,6 +1,7 @@
 from aiogram import types, Dispatcher
 
 from keyboards.about import userInfoKeyboard
+from userController import UserController
 
 
 async def userInfoButtonClick(call: types.CallbackQuery):
@@ -14,7 +15,8 @@ async def historyTaskButtonClick(call: types.CallbackQuery):
 
 
 async def userInfoButtonClick(call: types.CallbackQuery):
-    await call.message.edit_text('Ф.И.O: \n Возраст: \n Страна: \n Отзывы: \n'    ''', reply_markup=allUserInfoKeyboard''')
+    userinfo=UserController.GetUserInfo(call.from_user.id)
+    await call.message.edit_text(f"Login: {userinfo[1]} \nPassword: {userinfo[2]} \nФ.И.О: {userinfo[3]} \nTелефон: {userinfo[4]} \nEmail: {userinfo[5]}")
     await call.answer()
 
 

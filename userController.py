@@ -1,14 +1,14 @@
 import pymysql
 
-import settings
+import pref
 from exceptions import DuplicateNicknameException
 
 
 class UserController:
-    host = settings.host
-    user = settings.user
-    passwd = settings.passwd
-    db = settings.db
+    host = pref.host
+    user = pref.user
+    passwd = pref.passwd
+    db = pref.db
 
     @staticmethod
     def AddNewUser(id, nickname, password, fullname=None, email=None, phone=None):
@@ -74,3 +74,14 @@ class UserController:
             else:
                 return True
 
+    @staticmethod
+    def GetUserInfo(id):
+        connection = pymysql.connect(host=UserController.host,
+                                     user=UserController.user,
+                                     passwd=UserController.passwd,
+                                     db=UserController.db)
+        with connection:
+            cursor = connection.cursor()
+            cursor.execute('SELECT * FROM user WHERE id=%s', id)
+            row = cursor.fetchone()
+            return row
