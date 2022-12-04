@@ -2,6 +2,8 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.types import BotCommand
+
 from config import TOKEN
 from handlers.about import registerHandlersAbout
 from handlers.enter import registerHandlersEnter
@@ -21,6 +23,8 @@ async def main():
     registerHandlersTask(dp)
     registerHandlersRegistration(dp)
     registerHandlersCommon(dp)
+
+    await bot.set_my_commands([BotCommand(command='start', description='Старт')])
 
     await dp.start_polling()
 

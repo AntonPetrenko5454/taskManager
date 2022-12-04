@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from keyboards.registration import yesNoKeyboard
 from keyboards.services import getServicesKeyboard
 from registrationState import RegistrationState
-from userController import UserController
+from controllers.userController import UserController
 
 
 async def startRegistration(message: types.Message):
@@ -59,13 +59,14 @@ async def yesButtonClick(call: types.CallbackQuery, state: FSMContext):
     UserController.AddNewUser(call.from_user.id, data['nickname'], data['password'], data['fullName'],
                               data['phoneNumber'], data['email'])
     await state.next
-    # await call.message.answer('Выберите род деятельности , которым вы хотите заниматься', reply_markup=criteriaKeyboard)
     await call.answer()
+
 
 async def getService(message: types.Message, state: FSMContext):
     await state.update_data(service=message.text)
     data = await state.get_data()
-    await message.answer(f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}")
+    await message.answer(
+        f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}")
     await message.answer('Правильно ли вы ввели информацию?', reply_markup=yesNoKeyboard)
     await state.finish()
 
@@ -77,9 +78,13 @@ async def noButtonClick(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer('Введите nickname')
     await RegistrationState.nickname.set()
 
+
 async def serviceClick(call: types.CallbackQuery, state: FSMContext):
-    serviceId=int(call.data.split('_')[1])
+    serviceId = int(call.data.split('_')[1])
     await state.update_data(service=serviceId)
+    keyboard = getServicesKeyboard(serviceId)
+    if keyboard:
+        await call.message.edit_text('Выберите род деятельности', reply_markup=keyboard)
     data = await state.get_data()
     print(data)
 
@@ -95,4 +100,5 @@ def registerHandlersRegistration(dp: Dispatcher):
 
     dp.register_callback_query_handler(yesButtonClick, lambda call: call.data == 'yesButton_click', state='*')
     dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')
-    dp.register_callback_query_handler(serviceClick, lambda call: call.data.startswith('service_'), state=RegistrationState.service)
+    dp.register_callback_query_handler(serviceClick, lambda call: call.data.startswith('service_'),
+                                       state=RegistrationState.service)

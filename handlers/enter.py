@@ -1,7 +1,7 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 
-from userController import UserController
+from controllers.userController import UserController
 from enterState import EnterState
 from keyboards.main import mainKeyboard
 from keyboards.primary import primaryKeyboard

@@ -1,7 +1,7 @@
 from aiogram import types, Dispatcher
 
 from keyboards.about import userInfoKeyboard
-from userController import UserController
+from controllers.userController import UserController
 
 
 async def userInfoButtonClick(call: types.CallbackQuery):
