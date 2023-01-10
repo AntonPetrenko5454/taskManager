@@ -9,7 +9,9 @@ def getServicesKeyboard(parent=0):
         return None
     for service in services:
         servicesKeyboard.add(types.InlineKeyboardButton(text=service[1],callback_data=f'service_{service[0]}'))
+
     if parent != 0:
+        servicesKeyboard.add(types.InlineKeyboardButton(text=service[1], callback_data=f'service'))
         servicesKeyboard.add(types.InlineKeyboardButton(text='Назад', callback_data=f'service_{ServiceController.GetServiceParent(parent)}'))
     return servicesKeyboard
 

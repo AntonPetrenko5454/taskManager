@@ -56,19 +56,15 @@ async def getEmail(message: types.Message, state: FSMContext):
 async def yesButtonClick(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer('Регистрация успешно завершена')
     data = await state.get_data()
-    UserController.AddNewUser(call.from_user.id, data['nickname'], data['password'], data['fullName'],
-                              data['phoneNumber'], data['email'])
+    #UserController.AddNewUser(call.from_user.id, data['nickname'], data['password'], data['fullName'],
+                              #data['phoneNumber'], data['email'])
     await state.next
     await call.answer()
 
 
 async def getService(message: types.Message, state: FSMContext):
     await state.update_data(service=message.text)
-    data = await state.get_data()
-    await message.answer(
-        f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}")
-    await message.answer('Правильно ли вы ввели информацию?', reply_markup=yesNoKeyboard)
-    await state.finish()
+
 
 
 async def noButtonClick(call: types.CallbackQuery, state: FSMContext):
@@ -85,8 +81,15 @@ async def serviceClick(call: types.CallbackQuery, state: FSMContext):
     keyboard = getServicesKeyboard(serviceId)
     if keyboard:
         await call.message.edit_text('Выберите род деятельности', reply_markup=keyboard)
-    data = await state.get_data()
-    print(data)
+    else:
+        data = await state.get_data()
+        await call.message.answer(
+            f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}")
+        await call.message.answer('Правильно ли вы ввели информацию?', reply_markup=yesNoKeyboard)
+        await state.finish()
+    await RegistrationState.service.set()
+    await call.answer()
+
 
 
 def registerHandlersRegistration(dp: Dispatcher):
