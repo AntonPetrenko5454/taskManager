@@ -84,7 +84,7 @@ async def serviceClick(call: types.CallbackQuery, state: FSMContext):
     else:
         data = await state.get_data()
         await call.message.answer(
-            f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}")
+            f"Login: {data['nickname']}\nPassword: {data['password']}\nФ.И.О: {data['fullName']}\nТелефон: {data['phoneNumber']}\nEmail: {data['email']}\nСервис: {data['service']}")
         await call.message.answer('Правильно ли вы ввели информацию?', reply_markup=yesNoKeyboard)
         await state.finish()
     await RegistrationState.service.set()
