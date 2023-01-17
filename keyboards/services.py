@@ -1,17 +1,17 @@
 from aiogram import types
-from controllers.serviceController import ServiceController
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from controllers.service_controller import ServiceController
 
 
 def getServicesKeyboard(parent=0):
-    servicesKeyboard = types.InlineKeyboardMarkup(row_width=1)
+    servicesKeyboard = InlineKeyboardBuilder()
     services = ServiceController.GetServices(parent)
     if len(services) == 0:
         return None
     for service in services:
-        servicesKeyboard.add(types.InlineKeyboardButton(text=service[1],callback_data=f'service_{service[0]}'))
+        servicesKeyboard.row(types.InlineKeyboardButton(text=service[1], callback_data=f'service_{service[0]}'))
 
     if parent != 0:
-        servicesKeyboard.add(types.InlineKeyboardButton(text=service[1], callback_data=f'service'))
-        servicesKeyboard.add(types.InlineKeyboardButton(text='Назад', callback_data=f'service_{ServiceController.GetServiceParent(parent)}'))
-    return servicesKeyboard
-
+        servicesKeyboard.row(types.InlineKeyboardButton(text=service[1], callback_data=f'service'))
+        servicesKeyboard.row(types.InlineKeyboardButton(text='Назад', callback_data=f'service_{ServiceController.GetServiceParent(parent)}'))
+    return servicesKeyboard.as_markup()

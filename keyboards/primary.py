@@ -1,4 +1,6 @@
 from aiogram import types
 
-primaryKeyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-primaryKeyboard.add('Регистрация', 'Вход')
+# TODO: input_field_placeholder проверить как работает
+primaryKeyboard = types.ReplyKeyboardMarkup(keyboard=[[types.KeyboardButton(text='Регистрация')],
+                                                      [types.KeyboardButton(text='Вход')]],
+                                            resize_keyboard=True, input_field_placeholder='Выберите действие')

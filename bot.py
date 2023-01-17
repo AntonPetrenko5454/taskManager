@@ -1,32 +1,21 @@
 import asyncio
-
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import BotCommand
-
 from config import TOKEN
-from handlers.about import registerHandlersAbout
-from handlers.enter import registerHandlersEnter
-from handlers.primary import registerHandlersCommon
-from handlers.registration import registerHandlersRegistration
-from handlers.task import registerHandlersTask
-
-currentUsers = {}
+from handlers import about, enter, primary, registration
 
 
 async def main():
     bot = Bot(token=TOKEN)
-    dp = Dispatcher(bot, storage=MemoryStorage())
+    dp = Dispatcher()
 
-    registerHandlersEnter(dp)
-    registerHandlersAbout(dp)
-    registerHandlersTask(dp)
-    registerHandlersRegistration(dp)
-    registerHandlersCommon(dp)
+    dp.include_router(about.router)
+    dp.include_router(enter.router)
+    dp.include_router(primary.router)
+    dp.include_router(registration.router)
 
     await bot.set_my_commands([BotCommand(command='start', description='Старт')])
-
-    await dp.start_polling()
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == '__main__':

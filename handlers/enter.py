@@ -1,24 +1,28 @@
-from aiogram import types, Dispatcher
-from aiogram.dispatcher import FSMContext
-
-from controllers.userController import UserController
-from enterState import EnterState
+from aiogram import types, Dispatcher, Router
+from aiogram.filters import Text
+from aiogram.fsm.context import FSMContext
+from controllers.user_controller import UserController
+from enter_state import EnterState
 from keyboards.main import mainKeyboard
 from keyboards.primary import primaryKeyboard
 
+router = Router()
 
-async def enterName(message: types.Message):
+
+@router.message(Text(contains='Вход', ignore_case=True))
+async def enterName(message: types.Message, state: FSMContext):
     await message.answer('Введите логин')
-    await EnterState.nickname.set()
-    print(message.from_user.id)
+    await state.set_state(EnterState.nickname)
 
 
+@router.message(EnterState.nickname)
 async def enterPassword(message: types.Message, state: FSMContext):
     await message.answer('Введите пароль')
     await state.update_data(nickname=message.text)
-    await EnterState.password.set()
+    await state.set_state(EnterState.password)
 
 
+@router.message(EnterState.password)
 async def checkInfo(message: types.Message, state: FSMContext):
     await state.update_data(password=message.text)
     data = await state.get_data()
@@ -28,10 +32,4 @@ async def checkInfo(message: types.Message, state: FSMContext):
     else:
         await message.answer('Добро пожаловать',reply_markup=mainKeyboard)
 
-    await state.finish()
-
-
-def registerHandlersEnter(dp: Dispatcher):
-    dp.register_message_handler(enterName, regexp='Вход', state="*")
-    dp.register_message_handler(enterPassword, state=EnterState.nickname)
-    dp.register_message_handler(checkInfo, state=EnterState.password)
+    await state.clear()

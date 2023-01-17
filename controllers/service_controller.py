@@ -1,7 +1,5 @@
 import pymysql
-
 import pref
-from exceptions import DuplicateNicknameException
 
 
 class ServiceController:

@@ -1,11 +1,9 @@
 from aiogram import types, Dispatcher
-
 from keyboards.main import mainKeyboard
-from keyboards.task import keyboardYesNo
 
 
 async def exitButtonClick(call: types.CallbackQuery):
-    await call.message.edit_text('Вы уверены, что хотите выйти?', reply_markup=keyboardYesNo)
+    await call.message.edit_text('Вы уверены, что хотите выйти?')
     await call.answer()
 
 
@@ -30,14 +28,6 @@ def registerHandlersTask(dp: Dispatcher):
     # dp.register_callback_query_handler(yesButtonClick, lambda call: call.data == 'yesButton_click', state='*')
     # dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')
     dp.register_callback_query_handler(backToEnterButtonClick, lambda call: call.data == 'backToEnterButton_click', state='*')
-
-
-
-
-
-
-
-
 
 '''
 @dp.callback_query_handler(text='giveTaskButton_click')

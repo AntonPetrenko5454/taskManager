@@ -1,5 +1,5 @@
 from aiogram import types
-
+"""
 addTaskKeyboard = types.InlineKeyboardMarkup(row_width=1)
 addTaskButton = types.InlineKeyboardButton(text='Дать задание', callback_data='addTaskButton_click')
 addTaskButton_userTask = types.InlineKeyboardButton(text='Дать задание пользователю', callback_data='addTaskButton_userTask_click')
@@ -19,3 +19,4 @@ getTaskButton_showRequests = types.InlineKeyboardButton(text='Посмотрет
 getTaskButton_enqueue = types.InlineKeyboardButton(text='Встать в очередь', callback_data='getTaskButton_enqueue_click')
 getTaskBackButton = types.InlineKeyboardButton(text='Назад', callback_data='getTaskBackButton_click')
 getTaskKeyboard.add(getTaskButton_showRequests, getTaskButton_enqueue, getTaskBackButton)
+"""
