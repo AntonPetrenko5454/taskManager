@@ -58,7 +58,7 @@ async def getPhoneNumber(message: types.Message, state: FSMContext):
 @router.message(RegistrationState.email)
 async def getEmail(message: types.Message, state: FSMContext):
     await state.update_data(email=message.text)
-    await message.answer('Выберите род деятельности', reply_markup=getServicesKeyboard())
+    await message.answer('Выберите род деятельности', reply_markup=getServicesKeyboard('registration'))
     await state.set_state(RegistrationState.service)
 
 
@@ -77,12 +77,11 @@ async def noButtonClick(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer('Введите nickname')
     await state.set_state(RegistrationState.nickname)
 
-
-@router.callback_query(Text(startswith='service_'), RegistrationState.service)
+@router.callback_query(Text(startswith='registration_service_'), RegistrationState.service)
 async def serviceClick(call: types.CallbackQuery, state: FSMContext):
-    serviceId = int(call.data.split('_')[1])
+    serviceId = int(call.data.split('_')[2])
     await state.update_data(service=serviceId)
-    keyboard = getServicesKeyboard(serviceId)
+    keyboard = getServicesKeyboard('registration', serviceId)
     if keyboard:
         await call.message.edit_text('Выберите род деятельности', reply_markup=keyboard)
     else:

@@ -1,7 +1,7 @@
 from aiogram.fsm.state import StatesGroup, State
 
 class TaskState(StatesGroup):
-    criteria = State()
+    service = State()
     name = State()
     text = State()
     date = State()

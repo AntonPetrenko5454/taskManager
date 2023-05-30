@@ -24,6 +24,23 @@ class ServiceController:
             row = cursor.fetchall()
             return row
 
+
+    @staticmethod
+    def getServiceName(id):
+        connection = pymysql.connect(host=ServiceController.host,
+                                     user=ServiceController.user,
+                                     passwd=ServiceController.passwd,
+                                     db=ServiceController.db)
+        with connection:
+            cursor = connection.cursor()
+            query = 'SELECT service.name FROM service WHERE id=%s'
+            cursor.execute(query, id)
+            row= cursor.fetchone()[0]
+            if row is None:
+                return 0
+            return row
+
+
     @staticmethod
     def GetServiceParent(id):
         connection = pymysql.connect(host=ServiceController.host,
