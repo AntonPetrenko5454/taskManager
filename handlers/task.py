@@ -1,4 +1,3 @@
-import dp as dp
 from aiogram import types, Dispatcher, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
@@ -68,15 +67,9 @@ async def get_text(message: types.Message, state: FSMContext):
 async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict, state: FSMContext):
     selected, date = await SimpleCalendar().process_selection(callback_query, callback_data)
     if selected:
-        await callback_query.message.answer(f'{date.strftime("%d/%m/%Y")}')
-        await state.set_state(TaskState.date)
-
-
-@router.message(TaskState.date)
-async def get_date(message: types.Message, state: FSMContext):
-    await state.update_data(date=message.text)
-    await message.answer('Напишите место работы , если такого нет , то можете поставить <->')
-    await state.set_state(TaskState.address)
+        await state.update_data(date=f'{date.strftime("%d/%m/%Y")}')
+        await callback_query.message.answer('Напишите место работы , если такого нет , то можете поставить "-"')
+        await state.set_state(TaskState.address)
 
 
 @router.message(TaskState.address)
@@ -150,6 +143,3 @@ def registerHandlersTask(dp: Dispatcher):
     # dp.register_callback_query_handler(noButtonClick, lambda call: call.data == 'noButton_click', state='*')
     dp.register_callback_query_handler(backToEnterButtonClick, lambda call: call.data == 'backToEnterButton_click',
                                        state='*')
-
-
-''
